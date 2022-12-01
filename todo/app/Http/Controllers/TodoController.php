@@ -36,4 +36,16 @@ class TodoController extends Controller
         TodoFacade::done($task_id);
         return redirect()->back();
     }
+
+    public function edit(Request $request)
+    {
+        $response['task'] = TodoFacade::get($request['task_id']);
+        return view('pages.todo.edit')->with($response);
+    }
+
+    public function update(Request $request,$task_id)
+    {
+        TodoFacade::update($request->all(),$task_id);
+        return redirect()->back();
+    }
 }

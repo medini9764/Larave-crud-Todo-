@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="form-group">
-                            <input class="form-control" name="title" type="text" placeholder="Default input" aria-label="default input example">
+                            <input class="form-control" name="title" type="text" placeholder="Default input" aria-label="default input example" required>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -32,7 +32,7 @@
                             <th scope="col">Title</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
-                            
+
                             </tr>
                         </thead>
                         <tbody>
@@ -50,16 +50,33 @@
                                 <td>
                                     <a href="{{route('todo.delete',$task->id)}}" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
                                     <a href="{{route('todo.done',$task->id)}}" class="btn btn-success"><i class="far fa-check-circle"></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-info" onclick="taskEditModal({{ $task->id }})"><i class="far fa-edit" ></i></a>
                                 </td>
-                            </tr>       
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
         </div>
+        <!-- Modal -->
+            <div class="modal fade" id="taskEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="taskEditLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="taskEditLabel">Main Task Edit</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="taskEditContent">
 
+                        </div>
+
+                </div>
+                </div>
+            </div>
     </div>
 </div>
+
+
 @endsection
 @push('css')
 <style>
@@ -69,5 +86,30 @@
         color: #0bf345;
     }
 </style>
+@endpush
+@push('js')
+    <script>
+        function taskEditModal(task_id){
+            var data = {
+                task_id: task_id,
+            };
+            $.ajax({
+                url: "{{ route('todo.edit') }}",
+                headers: {
+                    'x-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                },
+                type : 'GET',
+                dataType: '',
+                data: data,
+                success: function (response){
+                    $('#taskEdit').modal('show');
+                    $('#taskEditContent').html(response);
+                }
+
+            });
+
+        }
+    </script>
+
 @endpush
 

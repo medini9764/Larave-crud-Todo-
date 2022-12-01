@@ -26,14 +26,32 @@ use Illuminate\Support\Facades\Request;
         {
                 $task=$this->task->find($task_id);
                 $task->delete();
-                
+
         }
         public function done($task_id)
-    {
+        {
             $task=$this->task->find($task_id);
             $task->done = 1;
             $task->update();
-            
-    }
+
+        }
+
+        public function get($task_id)
+        {
+            return $this->task->find($task_id);
+        }
+        public function update(array $data,$task_id)
+        {
+            /*$task = $this->task->find($task_id);
+            $task->update();*/
+
+            $task = $this->task->find($task_id);
+            $task->update($this->edit($task,$data));
+        }
+
+        public function edit(Todo $task, $data)
+        {
+            return array_merge($task->toArray(),$data);
+        }
     }
 ?>
